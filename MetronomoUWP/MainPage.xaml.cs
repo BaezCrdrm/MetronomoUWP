@@ -21,7 +21,7 @@ namespace MetronomoUWP
     public sealed partial class MainPage : Page
     {
         private bool isTimerRunning = false;
-        private int seconds = 0; //Se eliminará cuando funcione correctamente
+        private int beat = 1; //Se eliminará cuando funcione correctamente
         private CancellationTokenSource tokenSource;
         public int bpm { get; set; }
 
@@ -29,11 +29,14 @@ namespace MetronomoUWP
         {
             this.InitializeComponent();
             this.bpm = 60; //Cambiar en el futuro a un BPM usado previamente
+            
+            mediaElementSoundAccent.Source = new Uri("ms-appx:///Assets/tic.mp3", UriKind.RelativeOrAbsolute);
+            mediaElementSoundNormal.Source = new Uri("ms-appx:///Assets/toc.mp3", UriKind.RelativeOrAbsolute);
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
-            seconds = 0;
+            beat = 1;
             tokenSource = new CancellationTokenSource();
             if (isTimerRunning == true)
             {
@@ -70,8 +73,29 @@ namespace MetronomoUWP
             ///El código debe ejecutarse por un periodo indeterminado de tiempo.
             ///Basado en https://social.msdn.microsoft.com/Forums/windowsapps/en-US/40f4a4a9-1235-4071-b62b-e4077df3e1dc/uwpdispatch-timer-and-windows-10?forum=wpdevelop
             isTimerRunning = true;
-            Int32 ts = (60/bpm) * 1000;
-            TimeSpan myTimeSpan = new TimeSpan(0, 0, 0, 0, ts);
+            TimeSpan myTimeSpan;
+            int intValue = 0;
+            double doubleValue = 0.0;
+
+            if (bpm <= 60)
+            {
+                intValue = (60 / bpm) * 1000;
+                myTimeSpan = new TimeSpan(0, 0, 0, 0, intValue);
+            }
+            else
+            {
+                doubleValue = 60.0 / bpm;
+
+                //int seconds = (Int32)doubleValue;
+                //int milliseconds = (Int32)((doubleValue - seconds) * 10000);
+
+                //myTimeSpan = new TimeSpan(0, 0, 0, seconds, milliseconds);
+                myTimeSpan = new TimeSpan(0, 0, 0, 0, ((Int32)(doubleValue * 1000)));
+                doubleValue = 0.0;
+            }
+
+            mediaElementSoundAccent.PlaybackRate = ((60 / bpm) * 1000) * 0.5;
+            mediaElementSoundNormal.PlaybackRate = ((60 / bpm) * 1000) * 0.5;
 
             while (this.isTimerRunning)
             {
@@ -79,12 +103,13 @@ namespace MetronomoUWP
                 /// Temporal
                 //txbText.Text = seconds.ToString();
                 System.Diagnostics.Debug.WriteLine(DateTime.Now);
+                await playSounds(beat);
                 /// End
 
                 try
                 {
                     await Task.Delay(myTimeSpan, tokenSource.Token);
-                    seconds += 1;
+                    beat += 1;
                 }
                 catch(TaskCanceledException tex)
                 {
@@ -107,7 +132,7 @@ namespace MetronomoUWP
 
             if (((Button)sender).Name == btnLess.Name && this.bpm > 1)
                 this.bpm--;
-            else if(((Button)sender).Name == btnPlus.Name && this.bpm <= 200)
+            else if(((Button)sender).Name == btnPlus.Name && this.bpm < 240)
                 this.bpm++;
 
             txtBpm.Text = this.bpm.ToString();
@@ -129,6 +154,37 @@ namespace MetronomoUWP
         {
             int output;
             return int.TryParse(s, out output);
+        }
+
+        private async Task playSounds(int pulsoActual, int compas = 4, int accentNote = 1)
+        {            
+            // Corregir
+            if (pulsoActual > compas)
+            {
+                beat = 1;
+                pulsoActual = beat;
+            }
+
+            if (pulsoActual == accentNote)
+            {
+                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    mediaElementSoundAccent.Play();
+                });
+            }
+            else
+            {
+                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    mediaElementSoundNormal.Play();
+                });
+            }
+            System.Diagnostics.Debug.WriteLine(beat);
+        }
+
+        private void btntestplay_Click(object sender, RoutedEventArgs e)
+        {
+            playSounds(1);
         }
 
         ///Acerca de timers

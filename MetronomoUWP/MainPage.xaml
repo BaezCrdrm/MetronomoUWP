@@ -32,6 +32,10 @@
                         Content="&#xE109;" Click="btnChangeBpm_Click"
                         IsEnabled="True"/>
             </StackPanel>
+            
+            <MediaElement Name="mediaElementSoundAccent" AutoPlay="False" />
+            <MediaElement Name="mediaElementSoundNormal" AutoPlay="False" />
+            <Button Name="btntestplay" Content="Click me!" Click="btntestplay_Click" />
         </RelativePanel>
         
         
