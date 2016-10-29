@@ -7,10 +7,62 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <ResourceDictionary Source="StyleDictionary.xaml" />
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
-            <Button Name="btnStart" Content="Start" Click="btnStart_Click" />
-            <TextBlock Name="txbText" FontSize="30" Text=""/>
-        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <RelativePanel>
+            <StackPanel Orientation="Horizontal" Margin="0,10"
+                        RelativePanel.AlignHorizontalCenterWithPanel="True">
+                <Button Name="btnLess" Style="{StaticResource bpmButton}" 
+                        Content="&#xE108;" Click="btnChangeBpm_Click"
+                        IsEnabled="True"/>
+                <!--<TextBlock Name="txbBpm" Text="60" Margin="20,0" FontSize="20"
+                           VerticalAlignment="Center"/>-->
+                <TextBox Name="txtBpm" Text="60" Margin="20,0" FontSize="20"
+                         VerticalAlignment="Center" TextAlignment="Center"
+                         BorderThickness="0" TextChanged="txtBpm_TextChanged" InputScope="Number"/>
+                <Button Name="btnPlus" Style="{StaticResource bpmButton}" 
+                        Content="&#xE109;" Click="btnChangeBpm_Click"
+                        IsEnabled="True"/>
+            </StackPanel>
+        </RelativePanel>
+        
+        
+        <RelativePanel Grid.Row="1" >
+            <StackPanel RelativePanel.AlignHorizontalCenterWithPanel="True"
+                        RelativePanel.AlignVerticalCenterWithPanel="True">
+                <Button Name="btnStart" Content="Start" FontSize="38"
+                        Click="btnStart_Click" 
+                        Height="100" Width="200" />
+                <!--<Button Name="btnStart" Height="200" Width="200" Click="btnStart_Click"
+                        RelativePanel.AlignHorizontalCenterWithPanel="True"
+                        RelativePanel.AlignVerticalCenterWithPanel="True">
+                    <Button.Template>                    
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Ellipse>
+                                    <Ellipse.Fill>
+                                        <SolidColorBrush Color="Red" />
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Name="txbInnerBtn" Text="Start" Foreground="White" FontSize="40"/>
+                                </ContentPresenter>
+                            </Grid>
+                        </ControlTemplate>                        
+                    </Button.Template>
+                </Button>-->
+            
+            
+                <TextBlock Name="txbText" FontSize="30" Text="0"/>
+            </StackPanel>
+        </RelativePanel>
     </Grid>
 </Page>
