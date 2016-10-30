@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 using System.Threading;
 using System.Threading.Tasks;
+using MetronomoUWP.Model;
 
 namespace MetronomoUWP
 {
@@ -85,11 +86,6 @@ namespace MetronomoUWP
             else
             {
                 doubleValue = 60.0 / bpm;
-
-                //int seconds = (Int32)doubleValue;
-                //int milliseconds = (Int32)((doubleValue - seconds) * 10000);
-
-                //myTimeSpan = new TimeSpan(0, 0, 0, seconds, milliseconds);
                 myTimeSpan = new TimeSpan(0, 0, 0, 0, ((Int32)(doubleValue * 1000)));
                 doubleValue = 0.0;
             }
@@ -99,13 +95,8 @@ namespace MetronomoUWP
 
             while (this.isTimerRunning)
             {
-                /// Do something
-                /// Temporal
-                //txbText.Text = seconds.ToString();
                 System.Diagnostics.Debug.WriteLine(DateTime.Now);
                 await playSounds(beat);
-                /// End
-
                 try
                 {
                     await Task.Delay(myTimeSpan, tokenSource.Token);
@@ -140,21 +131,20 @@ namespace MetronomoUWP
 
         private void txtBpm_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //Arreglar
-            //if (isNumeric(txtBpm.Text) || txtBpm.Text == "")
-            //{
-            //    if (txtBpm.Text != "")
-            //        this.bpm = int.Parse(txtBpm.Text);
-            //}
-            //else
-            //    txtBpm.Text = this.bpm.ToString();
-        }
+            /// Validar
+            /// Actualmente si no se valida, la asignación no funcionará.
 
-        private bool isNumeric(string s)
-        {
-            int output;
-            return int.TryParse(s, out output);
-        }
+            /// Cambiar!
+            try
+            {
+                bpm = int.Parse(((TextBox)sender).Text.ToString());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.Write("Error conversión BPM:\n" + 
+                    ex.Message.ToString());
+            }
+        }        
 
         private async Task playSounds(int pulsoActual, int compas = 4, int accentNote = 1)
         {            
@@ -179,6 +169,7 @@ namespace MetronomoUWP
                     mediaElementSoundNormal.Play();
                 });
             }
+            beatStoryboard.Begin();
             System.Diagnostics.Debug.WriteLine(beat);
         }
 

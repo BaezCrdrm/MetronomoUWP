@@ -8,7 +8,23 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <ResourceDictionary Source="StyleDictionary.xaml" />
+        <Storyboard x:Name="beatStoryboard">
+            <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="ellipseBeat">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="400"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="ellipseBeat">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="400"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Style x:Key="bpmButton" TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="38" />
+            <!--<Setter Property="Background" Value="Red" />-->
+        </Style>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -23,8 +39,6 @@
                 <Button Name="btnLess" Style="{StaticResource bpmButton}" 
                         Content="&#xE108;" Click="btnChangeBpm_Click"
                         IsEnabled="True"/>
-                <!--<TextBlock Name="txbBpm" Text="60" Margin="20,0" FontSize="20"
-                           VerticalAlignment="Center"/>-->
                 <TextBox Name="txtBpm" Text="60" Margin="20,0" FontSize="20"
                          VerticalAlignment="Center" TextAlignment="Center"
                          BorderThickness="0" TextChanged="txtBpm_TextChanged" InputScope="Number"/>
@@ -41,7 +55,8 @@
         
         <RelativePanel Grid.Row="1" >
             <StackPanel RelativePanel.AlignHorizontalCenterWithPanel="True"
-                        RelativePanel.AlignVerticalCenterWithPanel="True">
+                        RelativePanel.AlignVerticalCenterWithPanel="True"
+                        Canvas.ZIndex="100" Background="gray">
                 <Button Name="btnStart" Content="Start" FontSize="38"
                         Click="btnStart_Click" 
                         Height="100" Width="200" />
@@ -63,10 +78,13 @@
                         </ControlTemplate>                        
                     </Button.Template>
                 </Button>-->
-            
-            
-                <TextBlock Name="txbText" FontSize="30" Text="0"/>
+                <TextBlock Name="txbText" FontSize="30" Text="0"/>               
             </StackPanel>
+
+            <Ellipse Name="ellipseBeat" Canvas.ZIndex="10" Fill="Red"
+                     RelativePanel.AlignHorizontalCenterWithPanel="True"
+                     RelativePanel.AlignVerticalCenterWithPanel="true"                      
+                     Width="0" Height="0" />
         </RelativePanel>
     </Grid>
 </Page>
