@@ -5,17 +5,17 @@
     xmlns:local="using:MetronomoUWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d" Loaded="page_loaded">
 
     <Page.Resources>
-        <Storyboard x:Name="beatStoryboard">
+        <Storyboard x:Name="beatStoryboard1">
             <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="ellipseBeat">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="400"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="600"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="200"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="ellipseBeat">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="400"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="600"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="200"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
@@ -23,68 +23,107 @@
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
             <Setter Property="Width" Value="38" />
             <Setter Property="Height" Value="38" />
-            <!--<Setter Property="Background" Value="Red" />-->
         </Style>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="#eee">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <RelativePanel>
-            <StackPanel Orientation="Horizontal" Margin="0,10"
+            <StackPanel Name="spBps" Orientation="Horizontal" Margin="0,10"
                         RelativePanel.AlignHorizontalCenterWithPanel="True">
                 <Button Name="btnLess" Style="{StaticResource bpmButton}" 
                         Content="&#xE108;" Click="btnChangeBpm_Click"
                         IsEnabled="True"/>
-                <TextBox Name="txtBpm" Text="60" Margin="20,0" FontSize="20"
+                <TextBox Name="txtBpm" Text="60" Margin="5,0" FontSize="20"
                          VerticalAlignment="Center" TextAlignment="Center"
                          BorderThickness="0" TextChanged="txtBpm_TextChanged" InputScope="Number"/>
                 <Button Name="btnPlus" Style="{StaticResource bpmButton}" 
                         Content="&#xE109;" Click="btnChangeBpm_Click"
                         IsEnabled="True"/>
             </StackPanel>
+
+            <ComboBox Name="cbCompas" Margin="10,0,0,0"
+                      RelativePanel.RightOf="spBps"
+                      RelativePanel.AlignVerticalCenterWithPanel="True" >
+                <ComboBoxItem>
+                    2 | 4
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    3 | 4
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    4 | 4
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    5 | 4
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    6 | 4
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    7 | 4
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    6 | 8
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    7 | 8
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    9 | 8
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    6 | 8
+                </ComboBoxItem>
+            </ComboBox>
             
             <MediaElement Name="mediaElementSoundAccent" AutoPlay="False" />
             <MediaElement Name="mediaElementSoundNormal" AutoPlay="False" />
-            <Button Name="btntestplay" Content="Click me!" Click="btntestplay_Click" />
         </RelativePanel>
-        
-        
+
         <RelativePanel Grid.Row="1" >
-            <StackPanel RelativePanel.AlignHorizontalCenterWithPanel="True"
+            <TextBlock Name="txbText" FontSize="100" Text="0" 
+                       RelativePanel.AlignRightWithPanel="True"
+                       Margin="0,20,30,0"
+                       Foreground="Black"/>
+            <RelativePanel RelativePanel.AlignHorizontalCenterWithPanel="True"
                         RelativePanel.AlignVerticalCenterWithPanel="True"
-                        Canvas.ZIndex="100" Background="gray">
-                <Button Name="btnStart" Content="Start" FontSize="38"
+                        Canvas.ZIndex="100">
+                <!--<Button Name="btnStart" Content="Start" FontSize="38"
                         Click="btnStart_Click" 
-                        Height="100" Width="200" />
-                <!--<Button Name="btnStart" Height="200" Width="200" Click="btnStart_Click"
+                        Height="100" Width="200"
+                        Canvas.ZIndex="20"
+                        Background="Transparent"
+                        RelativePanel.AlignVerticalCenterWith="ellipseBeat"
+                        Foreground="White"/> -->
+                <Button Name="btnStart" Height="200" Width="200" Click="btnStart_Click"
                         RelativePanel.AlignHorizontalCenterWithPanel="True"
-                        RelativePanel.AlignVerticalCenterWithPanel="True">
-                    <Button.Template>                    
+                        RelativePanel.AlignVerticalCenterWithPanel="True" Canvas.ZIndex="20">
+                    <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Grid>
                                 <Ellipse>
                                     <Ellipse.Fill>
-                                        <SolidColorBrush Color="Red" />
+                                        <SolidColorBrush Color="Transparent" />
                                     </Ellipse.Fill>
                                 </Ellipse>
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock Name="txbInnerBtn" Text="Start" Foreground="White" FontSize="40"/>
                                 </ContentPresenter>
                             </Grid>
-                        </ControlTemplate>                        
+                        </ControlTemplate>
                     </Button.Template>
-                </Button>-->
-                <TextBlock Name="txbText" FontSize="30" Text="0"/>               
-            </StackPanel>
+                </Button>
 
-            <Ellipse Name="ellipseBeat" Canvas.ZIndex="10" Fill="Red"
+                <Ellipse Name="ellipseBeat" Canvas.ZIndex="10" Fill="Red"
                      RelativePanel.AlignHorizontalCenterWithPanel="True"
                      RelativePanel.AlignVerticalCenterWithPanel="true"                      
-                     Width="0" Height="0" />
+                     Width="200" Height="200" />
+            </RelativePanel>
         </RelativePanel>
     </Grid>
 </Page>

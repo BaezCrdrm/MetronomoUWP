@@ -35,6 +35,11 @@ namespace MetronomoUWP
             mediaElementSoundNormal.Source = new Uri("ms-appx:///Assets/toc.mp3", UriKind.RelativeOrAbsolute);
         }
 
+        private void page_loaded(object sender, RoutedEventArgs e)
+        {
+            cbCompas.SelectedIndex = 2;
+        }
+
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             beat = 1;
@@ -45,6 +50,7 @@ namespace MetronomoUWP
                 txtBpm.IsEnabled = true;
                 btnLess.IsEnabled = true;
                 btnPlus.IsEnabled = true;
+                cbCompas.IsEnabled = true;
                 stopBackgroundTimer();
             }
             else
@@ -53,7 +59,9 @@ namespace MetronomoUWP
                 txtBpm.IsEnabled = false;
                 btnLess.IsEnabled = false;
                 btnPlus.IsEnabled = false;
+                cbCompas.IsEnabled = false;
                 btnStart.Content = "Stop";
+                beat = 1;
             }
         }
 
@@ -93,10 +101,12 @@ namespace MetronomoUWP
             mediaElementSoundAccent.PlaybackRate = ((60 / bpm) * 1000) * 0.5;
             mediaElementSoundNormal.PlaybackRate = ((60 / bpm) * 1000) * 0.5;
 
+            int compas = getCompas();
+
             while (this.isTimerRunning)
             {
                 System.Diagnostics.Debug.WriteLine(DateTime.Now);
-                await playSounds(beat);
+                await playSounds(beat, compas);
                 try
                 {
                     await Task.Delay(myTimeSpan, tokenSource.Token);
@@ -157,25 +167,34 @@ namespace MetronomoUWP
 
             if (pulsoActual == accentNote)
             {
-                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
                     mediaElementSoundAccent.Play();
                 });
             }
             else
             {
-                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
                     mediaElementSoundNormal.Play();
                 });
             }
-            beatStoryboard.Begin();
+
+            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+            {
+                beatStoryboard1.Begin();
+            });
+            //beatStoryboard1.Begin();
+
             System.Diagnostics.Debug.WriteLine(beat);
+            txbText.Text = beat.ToString();
         }
 
-        private void btntestplay_Click(object sender, RoutedEventArgs e)
+        private int getCompas()
         {
-            playSounds(1);
+            ComboBoxItem c = (ComboBoxItem)cbCompas.SelectedItem;
+            string[] tempArray = c.Content.ToString().Split('|');
+            return Int32.Parse(tempArray[0].ToString().Trim());
         }
 
         ///Acerca de timers
