@@ -33,6 +33,13 @@
         </Grid.RowDefinitions>
 
         <RelativePanel>
+            <Button Name="btnMenu" FontFamily="Segoe MDL2 Assets"
+                    Width="58" Height="58"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    Content="&#xE700;"
+                    FontSize="36"
+                    Click="btnMenu_Click"/>
+
             <StackPanel Name="spBps" Orientation="Horizontal" Margin="0,10"
                         RelativePanel.AlignHorizontalCenterWithPanel="True">
                 <Button Name="btnLess" Style="{StaticResource bpmButton}" 
@@ -84,6 +91,21 @@
             <MediaElement Name="mediaElementSoundAccent" AutoPlay="False" />
             <MediaElement Name="mediaElementSoundNormal" AutoPlay="False" />
         </RelativePanel>
+
+        <SplitView Grid.Row="1"
+                   OpenPaneLength="260">
+            <SplitView.Pane>
+                <RelativePanel>
+                    <ListBox>
+
+                    </ListBox>
+
+                    <StackPanel RelativePanel.AlignBottomWithPanel="True">
+                        <Button />
+                    </StackPanel>
+                </RelativePanel>
+            </SplitView.Pane>
+        </SplitView>
 
         <RelativePanel Grid.Row="1" >
             <TextBlock Name="txbText" FontSize="100" Text="0" 

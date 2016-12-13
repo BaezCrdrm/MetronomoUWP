@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -88,18 +82,18 @@ namespace MetronomoUWP
 
             if (bpm <= 60)
             {
-                intValue = (60 / bpm) * 1000;
+                intValue = ((60 / bpm) * 1000) - 7;
                 myTimeSpan = new TimeSpan(0, 0, 0, 0, intValue);
             }
             else
             {
                 doubleValue = 60.0 / bpm;
-                myTimeSpan = new TimeSpan(0, 0, 0, 0, ((Int32)(doubleValue * 1000)));
+                myTimeSpan = new TimeSpan(0, 0, 0, 0, (((Int32)(doubleValue * 1000)) - 7));
                 doubleValue = 0.0;
             }
 
-            mediaElementSoundAccent.PlaybackRate = ((60 / bpm) * 1000) * 0.5;
-            mediaElementSoundNormal.PlaybackRate = ((60 / bpm) * 1000) * 0.5;
+            //mediaElementSoundAccent.PlaybackRate = (((60 / bpm) * 1000) * 0.5);
+            //mediaElementSoundNormal.PlaybackRate = (((60 / bpm) * 1000) * 0.5);
 
             int compas = getCompas();
 
@@ -195,6 +189,11 @@ namespace MetronomoUWP
             ComboBoxItem c = (ComboBoxItem)cbCompas.SelectedItem;
             string[] tempArray = c.Content.ToString().Split('|');
             return Int32.Parse(tempArray[0].ToString().Trim());
+        }
+
+        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         ///Acerca de timers
